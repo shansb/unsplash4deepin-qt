@@ -39,6 +39,7 @@ void WallpaperThread::change()
 }
 void WallpaperThread::run()
 {
+    changeWallpaer();
     QTimer *m_pTimer = new QTimer();
     m_pTimer->setInterval(60*60*1000);
     connect(m_pTimer, &QTimer::timeout, this, &WallpaperThread::changeWallpaer);

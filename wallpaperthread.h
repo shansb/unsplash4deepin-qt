@@ -10,12 +10,14 @@ class WallpaperThread : public QThread
 public:
     explicit WallpaperThread(QObject *parent = 0);
 //    ~WallpaperThread();
+    void changeWallpaer();
+
 private slots:
     void change();
 
 protected:
     void run();
-    void changeWallpaer();
+
 };
 
 #endif // WALLPAPERTHREAD_H

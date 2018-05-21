@@ -1,8 +1,7 @@
 <RCC>
     <qresource prefix="/image">
-        <file>bugcatcher.ico</file>
-        <file>terminal.png</file>
         <file>TrayIcon16x16.png</file>
         <file>TrayIcon.png</file>
+        <file>TrayIcon.gif</file>
     </qresource>
 </RCC>

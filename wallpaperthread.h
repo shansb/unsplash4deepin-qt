@@ -11,6 +11,8 @@ public:
     explicit WallpaperThread(QObject *parent = 0);
 //    ~WallpaperThread();
     void changeWallpaer();
+    QWaitCondition sleep;
+    QMutex localMutex;
 
 private slots:
     void change();

@@ -39,11 +39,16 @@ void WallpaperThread::change()
 }
 void WallpaperThread::run()
 {
-    changeWallpaer();
-    QTimer *m_pTimer = new QTimer();
-    m_pTimer->setInterval(60*60*1000);
-    connect(m_pTimer, &QTimer::timeout, this, &WallpaperThread::changeWallpaer);
-    m_pTimer->start();
-    this->exec();
+    while (true) {
+        changeWallpaer();
+        unsigned long minute = 30;
+        sleep.wait(&localMutex,minute*60*1000);
+    }
+
+//    QTimer *m_pTimer = new QTimer();
+//    m_pTimer->setInterval(60*60*1000);
+//    connect(m_pTimer, &QTimer::timeout, this, &WallpaperThread::changeWallpaer);
+//    m_pTimer->start();
+//    this->exec();
 
 }

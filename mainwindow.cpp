@@ -56,7 +56,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeWallpaper()
 {
-    thread->changeWallpaer();
+    thread->sleep.wakeAll();
 
 }
 

@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    wallpaperthread.cpp
+    wallpaperthread.cpp \
+    iconthread.cpp
 
 HEADERS += \
         mainwindow.h \
-    wallpaperthread.h
+    wallpaperthread.h \
+    iconthread.h
 
 FORMS += \
         mainwindow.ui

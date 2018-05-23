@@ -45,7 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mSysTrayIcon->setContextMenu(trayMenu);
     //在系统托盘显示此对象
     mSysTrayIcon->show();
+    iconThread = new IconThread();
+    iconThread->init(mSysTrayIcon);
+    iconThread->start();
     thread = new WallpaperThread(this);
+    thread->init(mSysTrayIcon);
     thread->start();
 }
 
@@ -56,7 +60,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeWallpaper()
 {
-    thread->sleep.wakeAll();
+    iconThread->condtion.wakeAll();
+    thread->condtion.wakeAll();
 
 }
 

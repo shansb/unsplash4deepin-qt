@@ -5,6 +5,7 @@
 #include <QSystemTrayIcon>
 #include <QProcess>
 #include <wallpaperthread.h>
+#include <iconthread.h>
 namespace Ui {
 class MainWindow;
 }
@@ -39,6 +40,7 @@ private:
     QIcon icon;
     QIcon icon2;
     WallpaperThread *thread;
+    IconThread *iconThread;
 };
 
 #endif // MAINWINDOW_H

@@ -13,6 +13,11 @@ WallpaperThread::WallpaperThread(QObject *parent) :
 {
 
 }
+
+void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon)
+{
+    sysIcon = mSysTrayIcon;
+}
 void WallpaperThread::changeWallpaer()
 {
         QString  filePath = QDir::homePath().append(tr("/.config/unplash4deepin/"));
@@ -32,17 +37,15 @@ void WallpaperThread::changeWallpaer()
         QProcess::execute(cmd);
         QProcess::execute(tr("gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ").append(file));
 }
-void WallpaperThread::change()
-{
-    changeWallpaer();
 
-}
 void WallpaperThread::run()
 {
+    QIcon icon = QIcon(":/image/TrayIcon.png");
     while (true) {
         changeWallpaer();
+        sysIcon->setIcon(icon);
         unsigned long minute = 30;
-        sleep.wait(&localMutex,minute*60*1000);
+        condtion.wait(&localMutex,minute*60*1000);
     }
 
 //    QTimer *m_pTimer = new QTimer();

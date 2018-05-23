@@ -1,23 +1,22 @@
-#ifndef WALLPAPERTHREAD_H
-#define WALLPAPERTHREAD_H
+#ifndef ICONTHREAD_H
+#define ICONTHREAD_H
 #include <QThread>
 #include <QWaitCondition>
 #include <QMutex>
 #include <QSystemTrayIcon>
-class WallpaperThread : public QThread
+class IconThread : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit WallpaperThread(QObject *parent = 0);
-//    ~WallpaperThread();
-    void changeWallpaer();
+    explicit IconThread(QObject *parent = 0);
     QWaitCondition condtion;
-    QMutex localMutex;
+    QMutex mutex;
     void init(QSystemTrayIcon *mSysTrayIcon);
 
 
 private:
+    void setButtonIcon(int frame);
     QSystemTrayIcon *sysIcon;
 
 protected:
@@ -25,4 +24,4 @@ protected:
 
 };
 
-#endif // WALLPAPERTHREAD_H
+#endif // ICONTHREAD_H

@@ -16,7 +16,6 @@ public:
 
 
 private:
-    void setButtonIcon(int frame);
     QSystemTrayIcon *sysIcon;
 
 protected:

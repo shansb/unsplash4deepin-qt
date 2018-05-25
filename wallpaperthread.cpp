@@ -8,15 +8,23 @@
 #include <QDebug>
 #include <QTimer>
 #include <QEventLoop>
+#include <QSettings>
+#include <QTextCodec>
 WallpaperThread::WallpaperThread(QObject *parent) :
     QThread(parent)
 {
 
 }
 
-void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon)
+void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon,IconThread *thread)
 {
     sysIcon = mSysTrayIcon;
+    iconThread = thread;
+    QString projectPath = QCoreApplication::applicationDirPath();
+    QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(projectPath),QSettings::IniFormat);
+    configIni->setIniCodec(QTextCodec::codecForName("System"));
+    QString cycleTime = configIni->value("Config/CycleTime",tr("30")).toString();
+    minutes = cycleTime.toULong();
 }
 void WallpaperThread::changeWallpaer()
 {
@@ -42,10 +50,11 @@ void WallpaperThread::run()
 {
     QIcon icon = QIcon(":/image/TrayIcon.png");
     while (true) {
+        iconThread->condtion.wakeAll();
+        qDebug() << minutes;
         changeWallpaer();
         sysIcon->setIcon(icon);
-        unsigned long minute = 30;
-        condtion.wait(&localMutex,minute*60*1000);
+        condtion.wait(&localMutex,minutes*60*1000);
     }
 
 //    QTimer *m_pTimer = new QTimer();

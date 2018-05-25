@@ -4,6 +4,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 #include <QSystemTrayIcon>
+#include <iconthread.h>
 class WallpaperThread : public QThread
 {
     Q_OBJECT
@@ -14,11 +15,12 @@ public:
     void changeWallpaer();
     QWaitCondition condtion;
     QMutex localMutex;
-    void init(QSystemTrayIcon *mSysTrayIcon);
-
+    void init(QSystemTrayIcon *mSysTrayIcon,IconThread *thread);
+    unsigned long minutes;
 
 private:
     QSystemTrayIcon *sysIcon;
+    IconThread *iconThread;
 
 protected:
     void run();

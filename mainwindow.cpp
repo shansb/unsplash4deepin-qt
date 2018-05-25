@@ -31,8 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //新建QSystemTrayIcon对象
     mSysTrayIcon = new QSystemTrayIcon(this);
     //新建托盘要显示的icon
-    icon = QIcon(":/image/TrayIcon.png");
-    icon2 =QIcon(":/image/TrayIcon16x16.png");
+    icon = QIcon(":/image/TrayIcon16x16.png");
     //将icon设到QSystemTrayIcon对象中
     mSysTrayIcon->setIcon(icon);
     //当鼠标移动到托盘上的图标时，会显示此处设置的内容
@@ -45,11 +44,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mSysTrayIcon->setContextMenu(trayMenu);
     //在系统托盘显示此对象
     mSysTrayIcon->show();
+
     iconThread = new IconThread();
     iconThread->init(mSysTrayIcon);
     iconThread->start();
     thread = new WallpaperThread(this);
-    thread->init(mSysTrayIcon);
+    thread->init(mSysTrayIcon,iconThread);
     thread->start();
 }
 
@@ -60,14 +60,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeWallpaper()
 {
-    iconThread->condtion.wakeAll();
+//    iconThread->condtion.wakeAll();
     thread->condtion.wakeAll();
 
 }
 
 void MainWindow::setUp()
 {
-    this->show();
+    QDesktopServices::openUrl ( QUrl::fromLocalFile(tr("%1/setting.ini").arg(QCoreApplication::applicationDirPath())) );
 }
 
 

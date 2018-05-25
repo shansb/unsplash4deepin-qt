@@ -23,7 +23,6 @@ void IconThread::run()
 
     QIcon icon2 =QIcon(":/image/TrayIcon16x16.png");
     while (true) {
-        qDebug() << "Hi";
         condtion.wait(&mutex);
         sysIcon->setIcon(icon2);
     }

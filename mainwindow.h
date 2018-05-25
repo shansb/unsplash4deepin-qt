@@ -38,7 +38,6 @@ private:
     QProcess *proc;
     QString filePath;
     QIcon icon;
-    QIcon icon2;
     WallpaperThread *thread;
     IconThread *iconThread;
 };

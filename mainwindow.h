@@ -5,7 +5,6 @@
 #include <QSystemTrayIcon>
 #include <QProcess>
 #include <wallpaperthread.h>
-#include <iconthread.h>
 namespace Ui {
 class MainWindow;
 }
@@ -24,6 +23,7 @@ private slots:
     void changeWallpaper();
     void closeEvent(QCloseEvent *e);
     void changeEvent(QEvent *e);
+    void setAutoClear(bool flag);
 
 signals:
     void exit();
@@ -34,12 +34,13 @@ private:
     QMenu *trayMenu;
     QAction *setting;
     QAction *refresh;
+    QAction *clear;
     QAction *quit;
     QProcess *proc;
     QString filePath;
     QIcon icon;
     WallpaperThread *thread;
-    IconThread *iconThread;
+
 };
 
 #endif // MAINWINDOW_H

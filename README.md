@@ -20,3 +20,7 @@
 3. 清理缓存：勾选后会自动清理`~/Pictures/Wallpapers/` 目录里的jpg文件。
 4. 关于：跳转github项目主页。
 5. 退出：退出程序。
+
+### 截图
+
+![Logo](https://github.com/shansb/unsplash4deepin-qt/blob/master/screenshot.png?raw=true)

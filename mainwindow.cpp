@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(setUp(QString)));
     connect(refresh, SIGNAL(triggered(bool)), this, SLOT(changeWallpaper()));
     connect(about, SIGNAL(triggered(bool)), this, SLOT(aboutMe()));
-    connect(quit, SIGNAL(triggered(bool)), this, SIGNAL(exit()));
+    connect(quit, SIGNAL(triggered(bool)), this, SLOT(exitApp()));
     connect(clear, SIGNAL(triggered(bool)), this, SLOT(setAutoClear(bool)));
 
     //新建QSystemTrayIcon对象
@@ -89,13 +89,12 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu = new QMenu(this);
     trayMenu->addMenu(setting);
     trayMenu->addAction(refresh);
-    trayMenu->addAction(clear);
+//    trayMenu->addAction(clear);移除缓存清理功能
     trayMenu->addAction(about);
     trayMenu->addAction(quit);
     mSysTrayIcon->setContextMenu(trayMenu);
     //在系统托盘显示此对象
     mSysTrayIcon->show();
-
 
     thread->init(mSysTrayIcon,cycleTime.toULong());
     thread->start();
@@ -105,6 +104,16 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::exitApp()
+{
+    delete ui;
+    myApp->quit();
+}
+
+//void MainWindow::setApp(QApplication *app)
+//{
+//    myApp = app;
+//}
 
 void MainWindow::setAutoClear(bool flag)
 {
@@ -126,12 +135,6 @@ void MainWindow::iconIsActived(QSystemTrayIcon::ActivationReason e)
 {
     switch(e)
      {
-     //点击托盘显示窗口
-//     case QSystemTrayIcon::Trigger:
-//      {
-//        showNormal();
-//        break;
-//      }
      //双击托盘显示窗口
      case QSystemTrayIcon::DoubleClick:
      {

@@ -16,11 +16,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+//    void setApp(QApplication *app);
 
 
 private slots:
     void setUp(QString cycleTime);
     void changeWallpaper();
+    void exitApp();
     void closeEvent(QCloseEvent *e);
     void changeEvent(QEvent *e);
     void setAutoClear(bool flag);
@@ -47,7 +49,7 @@ private:
     QAction *oneHour;
     QAction *twoHour;
     QAction *fourHour;
-
+    QApplication *myApp;
 };
 
 #endif // MAINWINDOW_H

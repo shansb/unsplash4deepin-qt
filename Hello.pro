@@ -36,6 +36,9 @@ FORMS += \
         mainwindow.ui
 
 RESOURCES += \
-    image/myimage.qrc
+    resources.qrc
 
 CONFIG +=console
+
+TRANSLATIONS += \
+    languages/zh.ts \

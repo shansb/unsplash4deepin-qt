@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/TrayIcon16x16.png</file>
+        <file>image/TrayIcon.png</file>
+        <file>image/TrayIcon.gif</file>
+        <file>image/Taskbar.png</file>
+        <file>languages/zh.qm</file>
+    </qresource>
+</RCC>

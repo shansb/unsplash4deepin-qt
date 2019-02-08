@@ -23,12 +23,12 @@ void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime
 }
 void WallpaperThread::delCache(QString filePath)
 {
-    qDebug() << tr("开始清理壁纸缓存");
+    qDebug() << tr("begin to clear cache");
     QDir cacheDir = QDir(filePath);
     if ( cacheDir.exists() ) {
         QFileInfoList fileList = cacheDir.entryInfoList(QDir::Files);
         foreach (QFileInfo file, fileList){ //遍历文件信息
-            if (0 == file.suffix().compare(tr("jpg"))){ // 是jpg，删除
+            if (0 == file.suffix().compare("jpg")){ // 是jpg，删除
                 file.dir().remove(file.fileName());
             }
         }
@@ -40,19 +40,19 @@ void WallpaperThread::changeWallpaer()
     if(autoClear){
         delCache(QDir::homePath().append("/Pictures/Wallpapers"));
     }
-    QString  filePath = QDir::homePath().append(tr("/.config/unplash4deepin/"));
+    QString  filePath = QDir::homePath().append("/.config/unplash4deepin/");
     qDebug() << "start";
-    QProcess::execute(tr("rm -rf ").append(filePath).append(tr("cache")));
-    QProcess::execute(tr("mkdir -p ").append(filePath).append(tr("cache")));
+    QProcess::execute(tr("rm -rf ").append(filePath).append("cache"));
+    QProcess::execute(tr("mkdir -p ").append(filePath).append("cache"));
     QString datestr = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
-    QString file = filePath.append(tr("cache/")).append(datestr).append(tr(".jpg"));
+    QString file = filePath.append("cache/").append(datestr).append(".jpg");
     QDesktopWidget* desktopWidget = QApplication::desktop();
     QRect screenRect = desktopWidget->screenGeometry();
-    QString site = tr("https://source.unsplash.com/random/");
+    QString site = "https://source.unsplash.com/random/";
     int g_nActScreenW = screenRect.width();
     int g_nActScreenH = screenRect.height();
     site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
-    QString cmd = tr("wget ").append(site).append(tr(" --output-document=")).append(file);
+    QString cmd = tr("wget ").append(site).append(" --output-document=").append(file);
     qDebug() << cmd;
     QProcess::execute(cmd);
     QProcess::execute(tr("gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ").append(file));

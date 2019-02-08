@@ -21,23 +21,23 @@ MainWindow::MainWindow(QWidget *parent) :
     thread = new WallpaperThread(this);
 
     proc = new QProcess(this);
-    filePath = QDir::homePath().append(tr("/.config/unplash4deepin/"));
+    filePath = QDir::homePath().append("/.config/unplash4deepin/");
     //读取参数
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
-    QString cycleTime = configIni->value("Config/CycleTime",tr("60")).toString();
+    QString cycleTime = configIni->value("Config/CycleTime","60").toString();
     bool autoClear = configIni->value("Config/AutoClear",false).toBool();
     delete configIni;
     //创建托盘菜单
-    setting = new QMenu(tr("刷新时间"));
+    setting = new QMenu(tr("Interval"));
     halfAnHour = new QAction(this);
     oneHour = new QAction(this);
     twoHour = new QAction(this);
     fourHour = new QAction(this);
-    halfAnHour->setText(tr("30分钟"));
-    oneHour->setText(tr("1小时"));
-    twoHour->setText(tr("2小时"));
-    fourHour->setText(tr("4小时"));
+    halfAnHour->setText(tr("30 mins"));
+    oneHour->setText(tr("1 hour"));
+    twoHour->setText(tr("2 hours"));
+    fourHour->setText(tr("4 hours"));
     halfAnHour->setCheckable(true);
     oneHour->setCheckable(true);
     twoHour->setCheckable(true);
@@ -51,25 +51,25 @@ MainWindow::MainWindow(QWidget *parent) :
     setting->addAction(twoHour);
     setting->addAction(fourHour);
     refresh = new QAction(this);
-    refresh->setText(tr("手动刷新"));
+    refresh->setText(tr("Refresh"));
     clear = new QAction(this);
-    clear->setText("清理缓存");
+    clear->setText(tr("Clear Cache"));
     clear->setCheckable(true);
     clear->setChecked(autoClear);
     about = new QAction(this);
-    about->setText("关于");
+    about->setText(tr("About"));
     quit = new QAction(this);
-    quit->setText(tr("退出"));
+    quit->setText(tr("Quit"));
     //信号连接
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(halfAnHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
     connect(oneHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
     connect(twoHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
     connect(fourHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
-    signalMapper->setMapping(halfAnHour, tr("30"));
-    signalMapper->setMapping(oneHour, tr("60"));
-    signalMapper->setMapping(twoHour, tr("120"));
-    signalMapper->setMapping(fourHour, tr("240"));
+    signalMapper->setMapping(halfAnHour, "30");
+    signalMapper->setMapping(oneHour, "60");
+    signalMapper->setMapping(twoHour, "120");
+    signalMapper->setMapping(fourHour, "240");
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(setUp(QString)));
     connect(refresh, SIGNAL(triggered(bool)), this, SLOT(changeWallpaper()));
     connect(about, SIGNAL(triggered(bool)), this, SLOT(aboutMe()));
@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mSysTrayIcon->show();
 
     thread->init(mSysTrayIcon,cycleTime.toULong());
-    thread->start();
+    thread->start();// start to set wallpaper
 }
 
 MainWindow::~MainWindow()
@@ -135,7 +135,7 @@ void MainWindow::iconIsActived(QSystemTrayIcon::ActivationReason e)
 {
     switch(e)
      {
-     //双击托盘显示窗口
+     //双击托盘更换壁纸
      case QSystemTrayIcon::DoubleClick:
      {
        changeWallpaper();

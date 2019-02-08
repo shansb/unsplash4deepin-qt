@@ -23,7 +23,7 @@ public:
 
 private:
     QSystemTrayIcon *sysIcon;
-    void delCache(QString filePath);
+    void delJpgFiles(QString filePath);
 
 protected:
     void run();

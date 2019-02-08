@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QUrl>
 #include <QProcess>
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QDateTime>
@@ -20,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     thread = new WallpaperThread(this);
 
-    proc = new QProcess(this);
+//    proc = new QProcess(this);
     filePath = QDir::homePath().append("/.config/unplash4deepin/");
     //读取参数
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
@@ -53,9 +54,11 @@ MainWindow::MainWindow(QWidget *parent) :
     refresh = new QAction(this);
     refresh->setText(tr("Refresh"));
     clear = new QAction(this);
-    clear->setText(tr("Clear Cache"));
+    clear->setText(tr("Clear cache"));
     clear->setCheckable(true);
     clear->setChecked(autoClear);
+    save = new QAction(this);
+    save->setText(tr("Save it"));
     about = new QAction(this);
     about->setText(tr("About"));
     quit = new QAction(this);
@@ -72,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
     signalMapper->setMapping(fourHour, "240");
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(setUp(QString)));
     connect(refresh, SIGNAL(triggered(bool)), this, SLOT(changeWallpaper()));
+    connect(save, SIGNAL(triggered(bool)), this, SLOT(saveWallpaper()));
     connect(about, SIGNAL(triggered(bool)), this, SLOT(aboutMe()));
     connect(quit, SIGNAL(triggered(bool)), this, SLOT(exitApp()));
     connect(clear, SIGNAL(triggered(bool)), this, SLOT(setAutoClear(bool)));
@@ -89,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu = new QMenu(this);
     trayMenu->addMenu(setting);
     trayMenu->addAction(refresh);
+    trayMenu->addAction(save);
 //    trayMenu->addAction(clear);移除缓存清理功能
     trayMenu->addAction(about);
     trayMenu->addAction(quit);
@@ -115,10 +120,34 @@ void MainWindow::exitApp()
 //    myApp = app;
 //}
 
+void MainWindow::saveWallpaper()
+{
+    QDir target(QDir::homePath().append("/Pictures/unsplash"));
+    QDir sourceDir(QDir::homePath().append("/.config/unplash4deepin/cache"));
+    QString tip = tr("Current wallpaper has been saved to ");
+    if(!target.exists()){
+        if(!target.mkdir(target.absolutePath())){
+            tip = tr("Cannot create target floder");
+            QProcess::execute(tr("notify-send -a unsplash4deepin \"").append(tip).append("\""));
+            return;
+        }
+    }
+    QFileInfoList fileInfoList = sourceDir.entryInfoList();
+    foreach(QFileInfo fileInfo, fileInfoList){
+        qDebug()<< fileInfo.fileName();
+        if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+            continue;
+
+        if(fileInfo.isFile()){
+            QFile::copy(fileInfo.filePath(),target.filePath(fileInfo.fileName()));
+        }
+    }
+    QProcess::execute(tr("notify-send -a unsplash4deepin \"").append(tip).append(QDir::homePath()).append("/Pictures/unsplash\""));
+}
+
 void MainWindow::setAutoClear(bool flag)
 {
     thread->setAutoClear(flag);
-//    QString projectPath = QCoreApplication::applicationDirPath();
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
     configIni->setValue("Config/AutoClear",flag);

@@ -26,6 +26,7 @@ private slots:
     void closeEvent(QCloseEvent *e);
     void changeEvent(QEvent *e);
     void setAutoClear(bool flag);
+    void setAutoStart(bool flag);
     void saveWallpaper();
     void aboutMe();
     void iconIsActived(QSystemTrayIcon::ActivationReason e);
@@ -42,6 +43,7 @@ private:
     QAction *clear;
     QAction *quit;
     QAction *save;
+    QAction *autoStart;
     QAction *about;
     QProcess *proc;
     QString filePath;

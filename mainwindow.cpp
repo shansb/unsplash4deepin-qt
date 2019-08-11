@@ -20,7 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     thread = new WallpaperThread(this);
-
+    QFont f=QApplication::font();
+    f.setStyleStrategy(QFont::PreferAntialias);
+    QApplication::setFont(f);
 //    proc = new QProcess(this);
     filePath = QDir::homePath().append("/.config/unplash4deepin/");
     //读取参数
@@ -28,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     configIni->setIniCodec(QTextCodec::codecForName("System"));
     QString cycleTime = configIni->value("Config/CycleTime","60").toString();
     bool autoClear = configIni->value("Config/AutoClear",false).toBool();
+    bool autoBoot = configIni->value("Config/AutoStart",false).toBool();
     delete configIni;
     //创建托盘菜单
     setting = new QMenu(tr("Interval"));
@@ -59,6 +62,12 @@ MainWindow::MainWindow(QWidget *parent) :
     clear->setChecked(autoClear);
     save = new QAction(this);
     save->setText(tr("Save it"));
+    autoStart = new QAction(this);
+    autoStart->setText(tr("Auto Start"));
+    autoStart->setCheckable(true);
+    autoStart->setChecked(autoBoot);
+    //程序启动时按照设置做一次开机启动注册
+    setAutoStart(autoBoot);
     about = new QAction(this);
     about->setText(tr("About"));
     quit = new QAction(this);
@@ -76,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(setUp(QString)));
     connect(refresh, SIGNAL(triggered(bool)), this, SLOT(changeWallpaper()));
     connect(save, SIGNAL(triggered(bool)), this, SLOT(saveWallpaper()));
+    connect(autoStart,SIGNAL(triggered(bool)),this,SLOT(setAutoStart(bool)));
     connect(about, SIGNAL(triggered(bool)), this, SLOT(aboutMe()));
     connect(quit, SIGNAL(triggered(bool)), this, SLOT(exitApp()));
     connect(clear, SIGNAL(triggered(bool)), this, SLOT(setAutoClear(bool)));
@@ -94,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu->addMenu(setting);
     trayMenu->addAction(refresh);
     trayMenu->addAction(save);
+    trayMenu->addAction(autoStart);
 //    trayMenu->addAction(clear);移除缓存清理功能
     trayMenu->addAction(about);
     trayMenu->addAction(quit);
@@ -128,7 +139,9 @@ void MainWindow::saveWallpaper()
     if(!target.exists()){
         if(!target.mkdir(target.absolutePath())){
             tip = tr("Cannot create target floder");
-            QProcess::execute(tr("notify-send -a unsplash4deepin \"").append(tip).append("\""));
+            #ifdef Q_OS_LINUX
+                QProcess::execute(tr("notify-send -a unsplash4deepin \"").append(tip).append("\""));
+            #endif
             return;
         }
     }
@@ -142,7 +155,9 @@ void MainWindow::saveWallpaper()
             QFile::copy(fileInfo.filePath(),target.filePath(fileInfo.fileName()));
         }
     }
+#ifdef Q_OS_LINUX
     QProcess::execute(tr("notify-send -a unsplash4deepin \"").append(tip).append(QDir::homePath()).append("/Pictures/unsplash\""));
+#endif
 }
 
 void MainWindow::setAutoClear(bool flag)
@@ -151,6 +166,24 @@ void MainWindow::setAutoClear(bool flag)
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
     configIni->setValue("Config/AutoClear",flag);
+    delete configIni;
+}
+
+void MainWindow::setAutoStart(bool flag)
+{
+#ifdef Q_OS_WIN32
+    QSettings  reg("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",QSettings::NativeFormat);
+    if(flag){
+        QString strAppPath=QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        //strAppPath.replace(QChar('/'),QChar('\\'),Qt::CaseInsensitive);
+        reg.setValue("wirtepad",strAppPath);
+    } else {
+        reg.setValue("wirtepad","");
+    }
+#endif
+    QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
+    configIni->setIniCodec(QTextCodec::codecForName("System"));
+    configIni->setValue("Config/AutoStart",flag);
     delete configIni;
 }
 

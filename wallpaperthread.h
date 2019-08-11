@@ -4,6 +4,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 #include <QSystemTrayIcon>
+#include <QDesktopWidget>
 class WallpaperThread : public QThread
 {
     Q_OBJECT
@@ -21,8 +22,10 @@ public:
     bool autoClear;
 
 
+
 private:
     QSystemTrayIcon *sysIcon;
+    QDesktopWidget *desktopWidget;
     void delJpgFiles(QString filePath);
 
 protected:

@@ -38,7 +38,12 @@ FORMS += \
 RESOURCES += \
     resources.qrc
 
-CONFIG +=console
+#CONFIG +=console
+
+RC_FILE = res.rc
 
 TRANSLATIONS += \
     languages/zh.ts \
+
+DISTFILES += \
+    res.rc

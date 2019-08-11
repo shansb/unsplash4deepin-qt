@@ -4,6 +4,9 @@
 
 ![Logo](https://github.com/shansb/unsplash4Deepin/blob/master/unsplash4Deepin/src/resource/Taskbar.png?raw=true)
 
+### 增加适配win10
+
+win10版本说明详见[这里](https://github.com/shansb/unsplash4deepin-qt/blob/master/README-WIN10.md)
 
 ### 安装
 

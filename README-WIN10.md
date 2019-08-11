@@ -2,6 +2,8 @@
 
 > 因目前切换回win10做主力机，所以做了下移植，内存占用10M以下，没有实现windows下的气泡通知功能，以后再填坑。
 
+[下载地址](https://github.com/shansb/unsplash4deepin-qt/releases)
+
 ### 说明
 
 1. 采用unsplash图片源，有时候会比较慢，10分钟下载不成功会自动停止本次壁纸更新。

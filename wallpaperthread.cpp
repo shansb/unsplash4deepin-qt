@@ -64,9 +64,10 @@ void WallpaperThread::changeWallpaer()
         g_nActScreenH = desktopWidget->screenGeometry(i).height() > g_nActScreenH
                 ? desktopWidget->screenGeometry(i).height() : g_nActScreenH;
     }
-    QString site = "https://source.unsplash.com/random/";
-
-    site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
+//    QString site = "https://source.unsplash.com/random/";
+//    site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
+    QString site = "https://picsum.photos/";
+    site.append(QString::number(g_nActScreenW)).append("/").append(QString::number(g_nActScreenH));
     QString cmd = tr("wget ").append(site).append(" --output-document=").append(file);
 
 #ifdef Q_OS_LINUX

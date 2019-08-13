@@ -93,6 +93,11 @@ void WallpaperThread::changeWallpaer()
         qDebug() << "本次下载超时，不设置壁纸";
         return;
     }
+    QFileInfo fileInfo(file);
+    if(file.size() < 10){
+        qDebug() << "本次下载失败，不设置壁纸";
+        return;
+    }
     qDebug() << "设置壁纸";
     QSettings wallPaper("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
     QString path(file);

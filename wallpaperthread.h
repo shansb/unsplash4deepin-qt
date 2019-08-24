@@ -15,15 +15,17 @@ public:
     void changeWallpaer();
     QWaitCondition condtion;
     QMutex localMutex;
-    void init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime);
+    void init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime,QString source,QString key);
     void changeIcon(QString filePath);
     void setAutoClear(bool flag);
+    void changeSource(QString source);
     unsigned long minutes;
     bool autoClear;
-
+    QString keyword;
 
 
 private:
+    QString sourceSite;
     QSystemTrayIcon *sysIcon;
     QDesktopWidget *desktopWidget;
     void delJpgFiles(QString filePath);

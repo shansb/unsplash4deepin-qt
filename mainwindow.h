@@ -30,6 +30,8 @@ private slots:
     void saveWallpaper();
     void aboutMe();
     void iconIsActived(QSystemTrayIcon::ActivationReason e);
+    void changeSource(QString site);
+    void changeKeyword(QString key);
 
 signals:
     void exit();
@@ -54,6 +56,22 @@ private:
     QAction *twoHour;
     QAction *fourHour;
     QApplication *myApp;
+    //设置源
+    QMenu *sites;
+    QAction *site1;
+    QAction *site2;
+    //关键字
+    QMenu *keywords;
+    QAction *all;
+    QAction *wallpaper;
+    QAction *people;
+    QAction *textures;
+    QAction *nature;
+    QAction *architecture;
+    QAction *film;
+    QAction *animals;
+    QAction *travel;
+    QAction *food;
 };
 
 #endif // MAINWINDOW_H

@@ -18,10 +18,12 @@ WallpaperThread::WallpaperThread(QObject *parent) :
     desktopWidget = QApplication::desktop();
 }
 
-void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime)
+void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime,QString source,QString key)
 {
     sysIcon = mSysTrayIcon;
     minutes = cycleTime;
+    sourceSite = source;
+    keyword = key;
 }
 void WallpaperThread::delJpgFiles(QString filePath)
 {
@@ -64,10 +66,16 @@ void WallpaperThread::changeWallpaer()
         g_nActScreenH = desktopWidget->screenGeometry(i).height() > g_nActScreenH
                 ? desktopWidget->screenGeometry(i).height() : g_nActScreenH;
     }
-//    QString site = "https://source.unsplash.com/random/";
-//    site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
-    QString site = "https://picsum.photos/";
-    site.append(QString::number(g_nActScreenW)).append("/").append(QString::number(g_nActScreenH));
+    QString site = "https://source.unsplash.com/random/";
+    if(0 == sourceSite.compare("2")){
+        site = "https://picsum.photos/";
+        site.append(QString::number(g_nActScreenW)).append("/").append(QString::number(g_nActScreenH));
+    } else {
+       site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
+       if(keyword.compare("all") != 0){
+           site.append("/?").append(keyword);
+       }
+    }
     QString cmd = tr("wget ").append(site).append(" --output-document=").append(file);
 
 #ifdef Q_OS_LINUX
@@ -90,15 +98,15 @@ void WallpaperThread::changeWallpaer()
     p->waitForFinished(600000);
     qint64 end = QDateTime::currentDateTime().toMSecsSinceEpoch();
     if(end-start > 550000){
-        qDebug() << "本次下载超时，不设置壁纸";
+        qDebug() << "download time out,change wallpaper next time";
         return;
     }
     QFileInfo fileInfo(file);
     if(file.size() < 10){
-        qDebug() << "本次下载失败，不设置壁纸";
+        qDebug() << "download failed,change wallpaper next time";
         return;
     }
-    qDebug() << "设置壁纸";
+    qDebug() << "setting wallpaper";
     QSettings wallPaper("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
     QString path(file);
     //把注册表的桌面图片路径改为指定路径.
@@ -118,6 +126,10 @@ void WallpaperThread::setAutoClear(bool flag)
 void WallpaperThread::changeIcon(QString filePath)
 {
     sysIcon->setIcon(QIcon(filePath));
+}
+
+void WallpaperThread::changeSource(QString source){
+    sourceSite = source;
 }
 
 void WallpaperThread::run()

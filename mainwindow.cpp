@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
     QString cycleTime = configIni->value("Config/CycleTime","60").toString();
+    QString sourceSite = configIni->value("Config/Source","1").toString();
+    QString keyWord = configIni->value("Config/Keyword","wallpaper").toString();
     bool autoClear = configIni->value("Config/AutoClear",false).toBool();
     bool autoBoot = configIni->value("Config/AutoStart",false).toBool();
     delete configIni;
@@ -72,6 +74,87 @@ MainWindow::MainWindow(QWidget *parent) :
     about->setText(tr("About"));
     quit = new QAction(this);
     quit->setText(tr("Quit"));
+    //设置源
+    sites = new QMenu(tr("Source"));
+    site1 = new QAction(tr("Unsplash"),this);
+    site2 = new QAction(tr("Picsum"),this);
+    site1->setCheckable(true);
+    site2->setCheckable(true);
+    site1->setChecked(sourceSite.compare("1") == 0);
+    site2->setChecked(sourceSite.compare("2") == 0);
+    sites->addAction(site1);
+    sites->addAction(site2);
+    QSignalMapper *sourceMapper = new QSignalMapper(this);
+    connect(site1,SIGNAL(triggered(bool)),sourceMapper, SLOT(map()));
+    connect(site2,SIGNAL(triggered(bool)),sourceMapper, SLOT(map()));
+    sourceMapper->setMapping(site1,"1");
+    sourceMapper->setMapping(site2,"2");
+    connect(sourceMapper, SIGNAL(mapped(QString)),this, SLOT(changeSource(QString)));
+    //关键字
+    keywords = new QMenu(tr("Category"));
+    all = new QAction(tr("all"),this);
+    wallpaper = new QAction(tr("wallpaper"),this);
+    people = new QAction(tr("people"),this);
+    textures = new QAction(tr("textures"),this);
+    nature = new QAction(tr("nature"),this);
+    architecture = new QAction(tr("architecture"),this);
+    film = new QAction(tr("film"),this);
+    animals = new QAction(tr("animals"),this);
+    travel = new QAction(tr("travel"),this);
+    food = new QAction(tr("food"),this);
+    all->setCheckable(true);
+    wallpaper->setCheckable(true);
+    people->setCheckable(true);
+    textures->setCheckable(true);
+    nature->setCheckable(true);
+    architecture->setCheckable(true);
+    film->setCheckable(true);
+    animals->setCheckable(true);
+    travel->setCheckable(true);
+    food->setCheckable(true);
+    all->setChecked(keyWord.compare("all") == 0);
+    wallpaper->setChecked(keyWord.compare("wallpaper") == 0);
+    people->setChecked(keyWord.compare("people") == 0);
+    textures->setChecked(keyWord.compare("textures") == 0);
+    nature->setChecked(keyWord.compare("nature") == 0);
+    architecture->setChecked(keyWord.compare("architecture") == 0);
+    film->setChecked(keyWord.compare("film") == 0);
+    animals->setChecked(keyWord.compare("animals") == 0);
+    travel->setChecked(keyWord.compare("travel") == 0);
+    food->setChecked(keyWord.compare("food") == 0);
+    keywords->addAction(all);
+    keywords->addAction(wallpaper);
+    keywords->addAction(people);
+    keywords->addAction(textures);
+    keywords->addAction(nature);
+    keywords->addAction(architecture);
+    keywords->addAction(film);
+    keywords->addAction(animals);
+    keywords->addAction(travel);
+    keywords->addAction(food);
+    QSignalMapper *keyMapper = new QSignalMapper(this);
+    connect(all,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(wallpaper,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(people,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(textures,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(nature,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(architecture,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(film,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(animals,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(travel,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(food,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    keyMapper->setMapping(all,"all");
+    keyMapper->setMapping(wallpaper,"wallpaper");
+    keyMapper->setMapping(people,"people");
+    keyMapper->setMapping(textures,"textures");
+    keyMapper->setMapping(nature,"nature");
+    keyMapper->setMapping(architecture,"architecture");
+    keyMapper->setMapping(film,"film");
+    keyMapper->setMapping(animals,"animals");
+    keyMapper->setMapping(travel,"travel");
+    keyMapper->setMapping(food,"food");
+    connect(keyMapper, SIGNAL(mapped(QString)),this, SLOT(changeKeyword(QString)));
+
     //信号连接
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(halfAnHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
@@ -101,10 +184,17 @@ MainWindow::MainWindow(QWidget *parent) :
     mSysTrayIcon->setToolTip(QString("WallpaperChanger"));
 
     trayMenu = new QMenu(this);
-    trayMenu->addMenu(setting);
     trayMenu->addAction(refresh);
+    trayMenu->addMenu(setting);
+    trayMenu->addMenu(sites);
+    trayMenu->addMenu(keywords);
+    if(sourceSite.compare("1") != 0){
+        keywords->menuAction()->setVisible(false);
+    }
     trayMenu->addAction(save);
-    trayMenu->addAction(autoStart);
+#ifdef Q_OS_WIN32
+    trayMenu->addAction(autoStart);//win10有自启功能
+#endif
 //    trayMenu->addAction(clear);移除缓存清理功能
     trayMenu->addAction(about);
     trayMenu->addAction(quit);
@@ -112,7 +202,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //在系统托盘显示此对象
     mSysTrayIcon->show();
 
-    thread->init(mSysTrayIcon,cycleTime.toULong());
+    thread->init(mSysTrayIcon,cycleTime.toULong(),sourceSite,keyWord);
     thread->start();// start to set wallpaper
 }
 
@@ -228,6 +318,38 @@ void MainWindow::setUp(QString cycleTime)
 //    QDesktopServices::openUrl ( QUrl::fromLocalFile(tr("%1/setting.ini").arg(QCoreApplication::applicationDirPath())) );
 }
 
+void MainWindow::changeSource(QString site){
+    site1->setChecked(0 == site.compare("1"));
+    site2->setChecked(0 == site.compare("2"));
+    if(0 == site.compare("1")){
+        keywords->menuAction()->setVisible(true);
+    } else {
+        keywords->menuAction()->setVisible(false);
+    }
+    thread->changeSource(site);
+    QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
+    configIni->setIniCodec(QTextCodec::codecForName("System"));
+    configIni->setValue("Config/Source",site);
+    delete configIni;
+}
+
+void MainWindow::changeKeyword(QString key){
+    all->setChecked(key.compare("all") == 0);
+    wallpaper->setChecked(key.compare("wallpaper") == 0);
+    people->setChecked(key.compare("people") == 0);
+    textures->setChecked(key.compare("textures") == 0);
+    nature->setChecked(key.compare("nature") == 0);
+    architecture->setChecked(key.compare("architecture") == 0);
+    film->setChecked(key.compare("film") == 0);
+    animals->setChecked(key.compare("animals") == 0);
+    travel->setChecked(key.compare("travel") == 0);
+    food->setChecked(key.compare("food") == 0);
+    thread->keyword = key;
+    QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
+    configIni->setIniCodec(QTextCodec::codecForName("System"));
+    configIni->setValue("Config/Keyword",key);
+    delete configIni;
+}
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {

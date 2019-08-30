@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
         translator.load(QString(":/languages/zh.qm"));  //选择翻译文件
         a.installTranslator(&translator);
     }
-//    a.connect( &w, SIGNAL( exit() ), &a, SLOT( quit() ) );
     MainWindow w;//在翻译文件装载好之后初始化
+    //a.connect( &w, SIGNAL( exit() ), &a, SLOT( quit() ) );
+
     return a.exec();
 }

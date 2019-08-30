@@ -21,6 +21,7 @@ public:
     void changeSource(QString source);
     unsigned long minutes;
     bool autoClear;
+    bool isClose;
     QString keyword;
 
 

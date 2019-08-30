@@ -212,7 +212,9 @@ MainWindow::~MainWindow()
 }
 void MainWindow::exitApp()
 {
-    delete ui;
+    //delete ui;
+    thread->isClose = true;
+    changeWallpaper();
     myApp->quit();
 }
 

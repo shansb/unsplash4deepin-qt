@@ -24,6 +24,7 @@ void WallpaperThread::init(QSystemTrayIcon *mSysTrayIcon,unsigned long cycleTime
     minutes = cycleTime;
     sourceSite = source;
     keyword = key;
+    isClose = false;
 }
 void WallpaperThread::delJpgFiles(QString filePath)
 {
@@ -140,6 +141,11 @@ void WallpaperThread::run()
 //    changeWallpaer();
 //    sysIcon->setIcon(icon);
     while (true) {
+        if(isClose){
+            qDebug() << "exit!!";
+            this->exit(0);
+            return;
+        }
         changeIcon(":/image/TrayIcon16x16.png");
         qDebug() << minutes;
         changeWallpaer();

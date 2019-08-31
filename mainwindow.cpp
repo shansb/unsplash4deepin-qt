@@ -181,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //将icon设到QSystemTrayIcon对象中
     mSysTrayIcon->setIcon(icon);
     //当鼠标移动到托盘上的图标时，会显示此处设置的内容
-    mSysTrayIcon->setToolTip(QString("WallpaperChanger"));
+    mSysTrayIcon->setToolTip(tr("WallpaperChanger"));
 
     trayMenu = new QMenu(this);
     trayMenu->addAction(refresh);

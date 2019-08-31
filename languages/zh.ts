@@ -129,6 +129,11 @@
         <translation>食物</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="184"/>
+        <source>WallpaperChanger</source>
+        <translation>双击更换壁纸</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="228"/>
         <source>Current wallpaper has been saved to </source>
         <translation>当前壁纸已被保存至 </translation>
@@ -163,27 +168,27 @@
 <context>
     <name>WallpaperThread</name>
     <message>
-        <location filename="../wallpaperthread.cpp" line="30"/>
+        <location filename="../wallpaperthread.cpp" line="32"/>
         <source>begin to clear jpg file in </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="79"/>
+        <location filename="../wallpaperthread.cpp" line="81"/>
         <source>wget </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="83"/>
+        <location filename="../wallpaperthread.cpp" line="85"/>
         <source>gsettings set com.deepin.wrap.gnome.desktop.background picture-uri </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="88"/>
+        <location filename="../wallpaperthread.cpp" line="90"/>
         <source>Invoke-WebRequest -Uri </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="95"/>
+        <location filename="../wallpaperthread.cpp" line="97"/>
         <source>C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe</source>
         <translation type="unfinished"></translation>
     </message>

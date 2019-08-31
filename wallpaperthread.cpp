@@ -1,5 +1,7 @@
 #include "wallpaperthread.h"
+#ifdef Q_OS_WIN32
 #include <windows.h>
+#endif
 #include <QDir>
 #include <QUrl>
 #include <QProcess>

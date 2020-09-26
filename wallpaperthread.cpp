@@ -79,11 +79,15 @@ void WallpaperThread::changeWallpaer()
            site.append("/?").append(keyword);
        }
     }
-    QString cmd = tr("wget ").append(site).append(" --output-document=").append(file);
+    QString cmd = QString("wget ").append(site).append(" --output-document=").append(file);
 
 #ifdef Q_OS_LINUX
+    QStringList options;
     QProcess::execute(cmd);
-    QProcess::execute(tr("gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ").append(file));
+    QString setWallpaper =  QString("for screen in  `xrandr|grep ' connected'|awk '{print $1}'`; do dbus-send --dest=com.deepin.daemon.Appearance /com/deepin/daemon/Appearance --print-reply com.deepin.daemon.Appearance.SetMonitorBackground string:$screen string:'").append(file).append("';done");
+    options << "-c" << setWallpaper;
+    QProcess::execute("/bin/bash",options);
+//    QProcess::execute(tr("gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ").append(file));
 #endif
 
 #ifdef Q_OS_WIN32

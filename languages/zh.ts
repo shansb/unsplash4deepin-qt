@@ -10,11 +10,11 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="29"/>
-        <location filename="../mainwindow.cpp" line="256"/>
-        <location filename="../mainwindow.cpp" line="274"/>
-        <location filename="../mainwindow.cpp" line="314"/>
-        <location filename="../mainwindow.cpp" line="330"/>
-        <location filename="../mainwindow.cpp" line="348"/>
+        <location filename="../mainwindow.cpp" line="264"/>
+        <location filename="../mainwindow.cpp" line="282"/>
+        <location filename="../mainwindow.cpp" line="322"/>
+        <location filename="../mainwindow.cpp" line="339"/>
+        <location filename="../mainwindow.cpp" line="357"/>
         <source>%1/setting.ini</source>
         <translation type="unfinished"></translation>
     </message>
@@ -74,78 +74,83 @@
         <translation>Picsum(国内快)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="94"/>
+        <location filename="../mainwindow.cpp" line="81"/>
+        <source>FY4(satellite)</source>
+        <translation>风云4号</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="100"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="95"/>
+        <location filename="../mainwindow.cpp" line="101"/>
         <source>all</source>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="96"/>
+        <location filename="../mainwindow.cpp" line="102"/>
         <source>wallpaper</source>
         <translation>壁纸</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="97"/>
+        <location filename="../mainwindow.cpp" line="103"/>
         <source>people</source>
         <translation>人物</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="98"/>
+        <location filename="../mainwindow.cpp" line="104"/>
         <source>textures</source>
         <translation>纹理</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="99"/>
+        <location filename="../mainwindow.cpp" line="105"/>
         <source>nature</source>
         <translation>自然</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="100"/>
+        <location filename="../mainwindow.cpp" line="106"/>
         <source>architecture</source>
         <translation>建筑</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="101"/>
+        <location filename="../mainwindow.cpp" line="107"/>
         <source>film</source>
         <translation>电影</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="102"/>
+        <location filename="../mainwindow.cpp" line="108"/>
         <source>animals</source>
         <translation>动物</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="103"/>
+        <location filename="../mainwindow.cpp" line="109"/>
         <source>travel</source>
         <translation>旅行</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="104"/>
+        <location filename="../mainwindow.cpp" line="110"/>
         <source>food</source>
         <translation>食物</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="184"/>
+        <location filename="../mainwindow.cpp" line="190"/>
         <source>WallpaperChanger</source>
         <translation>双击更换壁纸</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
+        <location filename="../mainwindow.cpp" line="236"/>
         <source>Current wallpaper has been saved to </source>
         <translation>当前壁纸已被保存至 </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Cannot create target floder</source>
         <translation>无法创建文件夹</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="233"/>
-        <location filename="../mainwindow.cpp" line="249"/>
+        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="257"/>
         <source>notify-send -a unsplash4deepin &quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -168,27 +173,17 @@
 <context>
     <name>WallpaperThread</name>
     <message>
-        <location filename="../wallpaperthread.cpp" line="32"/>
+        <location filename="../wallpaperthread.cpp" line="34"/>
         <source>begin to clear jpg file in </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="81"/>
-        <source>wget </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../wallpaperthread.cpp" line="85"/>
-        <source>gsettings set com.deepin.wrap.gnome.desktop.background picture-uri </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../wallpaperthread.cpp" line="90"/>
+        <location filename="../wallpaperthread.cpp" line="133"/>
         <source>Invoke-WebRequest -Uri </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaperthread.cpp" line="97"/>
+        <location filename="../wallpaperthread.cpp" line="140"/>
         <source>C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe</source>
         <translation type="unfinished"></translation>
     </message>

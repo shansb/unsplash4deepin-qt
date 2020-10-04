@@ -26,4 +26,4 @@ win10版本说明详见[这里](https://github.com/shansb/unsplash4deepin-qt/blo
 
 ### 截图
 
-![Logo](https://github.com/shansb/unsplash4deepin-qt/blob/master/screenshot.png?raw=true)
+![Logo](https://github.com/shansb/unsplash4deepin-qt/blob/master/screenshoot.png?raw=true)

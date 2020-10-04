@@ -38,24 +38,24 @@ MainWindow::MainWindow(QWidget *parent) :
     setting = new QMenu(tr("Interval"));
     halfAnHour = new QAction(this);
     oneHour = new QAction(this);
-    twoHour = new QAction(this);
-    fourHour = new QAction(this);
+    twoHours = new QAction(this);
+    fourHours = new QAction(this);
     halfAnHour->setText(tr("30 mins"));
     oneHour->setText(tr("1 hour"));
-    twoHour->setText(tr("2 hours"));
-    fourHour->setText(tr("4 hours"));
+    twoHours->setText(tr("2 hours"));
+    fourHours->setText(tr("4 hours"));
     halfAnHour->setCheckable(true);
     oneHour->setCheckable(true);
-    twoHour->setCheckable(true);
-    fourHour->setCheckable(true);
+    twoHours->setCheckable(true);
+    fourHours->setCheckable(true);
     halfAnHour->setChecked(0 == cycleTime.compare("30"));
     oneHour->setChecked(0 == cycleTime.compare("60"));
-    twoHour->setChecked(0 == cycleTime.compare("120"));
-    fourHour->setChecked(0 == cycleTime.compare("240"));
+    twoHours->setChecked(0 == cycleTime.compare("120"));
+    fourHours->setChecked(0 == cycleTime.compare("240"));
     setting->addAction(halfAnHour);
     setting->addAction(oneHour);
-    setting->addAction(twoHour);
-    setting->addAction(fourHour);
+    setting->addAction(twoHours);
+    setting->addAction(fourHours);
     refresh = new QAction(this);
     refresh->setText(tr("Refresh"));
     clear = new QAction(this);
@@ -78,17 +78,23 @@ MainWindow::MainWindow(QWidget *parent) :
     sites = new QMenu(tr("Source"));
     site1 = new QAction(tr("Unsplash"),this);
     site2 = new QAction(tr("Picsum"),this);
+    site3 = new QAction(tr("FY4(satellite)"),this);
     site1->setCheckable(true);
     site2->setCheckable(true);
+    site3->setCheckable(true);
     site1->setChecked(sourceSite.compare("1") == 0);
     site2->setChecked(sourceSite.compare("2") == 0);
+    site3->setChecked(sourceSite.compare("3") == 0);
     sites->addAction(site1);
     sites->addAction(site2);
+    sites->addAction(site3);
     QSignalMapper *sourceMapper = new QSignalMapper(this);
     connect(site1,SIGNAL(triggered(bool)),sourceMapper, SLOT(map()));
     connect(site2,SIGNAL(triggered(bool)),sourceMapper, SLOT(map()));
+    connect(site3,SIGNAL(triggered(bool)),sourceMapper, SLOT(map()));
     sourceMapper->setMapping(site1,"1");
     sourceMapper->setMapping(site2,"2");
+    sourceMapper->setMapping(site3,"3");
     connect(sourceMapper, SIGNAL(mapped(QString)),this, SLOT(changeSource(QString)));
     //关键字
     keywords = new QMenu(tr("Category"));
@@ -159,12 +165,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(halfAnHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
     connect(oneHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
-    connect(twoHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
-    connect(fourHour, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
+    connect(twoHours, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
+    connect(fourHours, SIGNAL(triggered(bool)), signalMapper, SLOT(map()));
     signalMapper->setMapping(halfAnHour, "30");
     signalMapper->setMapping(oneHour, "60");
-    signalMapper->setMapping(twoHour, "120");
-    signalMapper->setMapping(fourHour, "240");
+    signalMapper->setMapping(twoHours, "120");
+    signalMapper->setMapping(fourHours, "240");
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(setUp(QString)));
     connect(refresh, SIGNAL(triggered(bool)), this, SLOT(changeWallpaper()));
     connect(save, SIGNAL(triggered(bool)), this, SLOT(saveWallpaper()));
@@ -309,8 +315,8 @@ void MainWindow::setUp(QString cycleTime)
 {
     halfAnHour->setChecked(0 == cycleTime.compare("30"));
     oneHour->setChecked(0 == cycleTime.compare("60"));
-    twoHour->setChecked(0 == cycleTime.compare("120"));
-    fourHour->setChecked(0 == cycleTime.compare("240"));
+    twoHours->setChecked(0 == cycleTime.compare("120"));
+    fourHours->setChecked(0 == cycleTime.compare("240"));
     thread->minutes=cycleTime.toULong();
 //    QString projectPath = QCoreApplication::applicationDirPath();
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
@@ -323,6 +329,7 @@ void MainWindow::setUp(QString cycleTime)
 void MainWindow::changeSource(QString site){
     site1->setChecked(0 == site.compare("1"));
     site2->setChecked(0 == site.compare("2"));
+    site3->setChecked(0 == site.compare("3"));
     if(0 == site.compare("1")){
         keywords->menuAction()->setVisible(true);
     } else {

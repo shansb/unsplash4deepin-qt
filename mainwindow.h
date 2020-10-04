@@ -53,13 +53,14 @@ private:
     WallpaperThread *thread;
     QAction *halfAnHour;
     QAction *oneHour;
-    QAction *twoHour;
-    QAction *fourHour;
+    QAction *twoHours;
+    QAction *fourHours;
     QApplication *myApp;
     //设置源
     QMenu *sites;
     QAction *site1;
     QAction *site2;
+    QAction *site3;
     //关键字
     QMenu *keywords;
     QAction *all;

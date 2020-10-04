@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QtGlobal>
+#include <QPainter>
 WallpaperThread::WallpaperThread(QObject *parent) :
     QThread(parent)
 {
@@ -73,17 +74,54 @@ void WallpaperThread::changeWallpaer()
     if(0 == sourceSite.compare("2")){
         site = "https://picsum.photos/";
         site.append(QString::number(g_nActScreenW)).append("/").append(QString::number(g_nActScreenH));
-    } else {
+    } else if (0 == sourceSite.compare("1")){
        site.append(QString::number(g_nActScreenW)).append("x").append(QString::number(g_nActScreenH));
        if(keyword.compare("all") != 0){
            site.append("/?").append(keyword);
        }
+    } else if (0 == sourceSite.compare("3")) {
+        site = QString("http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/FY4A_DISK.JPG?").append(datestr);
     }
     QString cmd = QString("wget ").append(site).append(" --output-document=").append(file);
 
 #ifdef Q_OS_LINUX
     QStringList options;
     QProcess::execute(cmd);
+#endif
+    if (0 == sourceSite.compare("3")) {
+        if(g_nActScreenW > g_nActScreenH){
+           int height = 2198*10/8;
+           g_nActScreenW = g_nActScreenW*height/g_nActScreenH;
+           g_nActScreenH =height;
+        } else {
+           int width = 2198*10/8;
+           g_nActScreenH = g_nActScreenH*width/g_nActScreenW;
+        }
+        //process the earth image to fit the largest screen
+        //int trueSize = g_nActScreenH*8/10 > g_nActScreenW*8/10 ? g_nActScreenW*8/10 : g_nActScreenH*8/10;
+        int trueSize = 2198;
+        // move the watermark
+        QImage earth(file);
+        QImage blackBlock(430,160,QImage::Format_RGB32);
+        blackBlock.fill(QColor(0,0,0));
+        QPainter imagepainter (&earth);
+        imagepainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        imagepainter.drawImage(0,0,blackBlock);
+        imagepainter.drawImage(2198-430,2198-160,blackBlock);
+        imagepainter.end();
+
+//        if(2198 > trueSize){
+//            //resize the earth image to true size
+//            earth = earth.scaled(trueSize,trueSize,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+//        }
+        QImage backgorund(g_nActScreenW,g_nActScreenH,QImage::Format_RGB32);
+        backgorund.fill(QColor(0,0,0));
+        QPainter paperPainter(&backgorund);
+        paperPainter.drawImage((g_nActScreenW-trueSize)/2,(g_nActScreenH-trueSize)/2,earth);
+        paperPainter.end();
+        backgorund.save(file);
+    }
+#ifdef Q_OS_LINUX
     QString setWallpaper =  QString("for screen in  `xrandr|grep ' connected'|awk '{print $1}'`; do dbus-send --dest=com.deepin.daemon.Appearance /com/deepin/daemon/Appearance --print-reply com.deepin.daemon.Appearance.SetMonitorBackground string:$screen string:'").append(file).append("';done");
     options << "-c" << setWallpaper;
     QProcess::execute("/bin/bash",options);

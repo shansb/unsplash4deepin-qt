@@ -88,6 +88,30 @@ void WallpaperThread::changeWallpaer()
     QStringList options;
     QProcess::execute(cmd);
 #endif
+#ifdef Q_OS_WIN32
+    //Invoke-WebRequest -Uri 'https://source.unsplash.com/random/1280x1024' -OutFile 'test.jpg'
+    cmd = QString("Invoke-WebRequest -Uri ").append(site).append(" -OutFile '").append(file).append("'");
+
+    qDebug() << cmd;
+    QStringList commands1;
+    commands1.append("-Command");
+    commands1.append(cmd);
+    QProcess *p = new QProcess();
+    QString powershell=QString("C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe");
+    p->start(powershell,commands1);
+    qint64 start = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    p->waitForFinished(600000);
+    qint64 end = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    if(end-start > 550000){
+        qDebug() << "download time out,change wallpaper next time";
+        return;
+    }
+    QFileInfo fileInfo(file);
+    if(file.size() < 10){
+        qDebug() << "download failed,change wallpaper next time";
+        return;
+    }
+#endif
     if (0 == sourceSite.compare("3")) {
         if(g_nActScreenW > g_nActScreenH){
            int height = 2198*10/8;
@@ -129,28 +153,6 @@ void WallpaperThread::changeWallpaer()
 #endif
 
 #ifdef Q_OS_WIN32
-    //Invoke-WebRequest -Uri 'https://source.unsplash.com/random/1280x1024' -OutFile 'test.jpg'
-    cmd = tr("Invoke-WebRequest -Uri ").append(site).append(" -OutFile '").append(file).append("'");
-
-    qDebug() << cmd;
-    QStringList commands1;
-    commands1.append("-Command");
-    commands1.append(cmd);
-    QProcess *p = new QProcess();
-    QString powershell=tr("C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe");
-    p->start(powershell,commands1);
-    qint64 start = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    p->waitForFinished(600000);
-    qint64 end = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    if(end-start > 550000){
-        qDebug() << "download time out,change wallpaper next time";
-        return;
-    }
-    QFileInfo fileInfo(file);
-    if(file.size() < 10){
-        qDebug() << "download failed,change wallpaper next time";
-        return;
-    }
     qDebug() << "setting wallpaper";
     QSettings wallPaper("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
     QString path(file);

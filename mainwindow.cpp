@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QSignalMapper>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -184,6 +185,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mSysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconIsActived(QSystemTrayIcon::ActivationReason)));
     //新建托盘要显示的icon
     icon = QIcon(":/image/TrayIcon.png");
+#ifdef Q_OS_MAC
+    icon = QIcon(":/image/TrayIcon-mac.png");
+#endif
     //将icon设到QSystemTrayIcon对象中
     mSysTrayIcon->setIcon(icon);
     //当鼠标移动到托盘上的图标时，会显示此处设置的内容
@@ -200,6 +204,9 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu->addAction(save);
 #ifdef Q_OS_WIN32
     trayMenu->addAction(autoStart);//win10有自启功能
+#endif
+#ifdef Q_OS_MAC
+    trayMenu->addAction(autoStart);
 #endif
 //    trayMenu->addAction(clear);移除缓存清理功能
     trayMenu->addAction(about);
@@ -279,10 +286,41 @@ void MainWindow::setAutoStart(bool flag)
         reg.setValue("wirtepad","");
     }
 #endif
+#ifdef Q_OS_MAC
+//    QStringList args;
+//    args << "-e tell application \"System Events\" to delete login item\""
+//                + macOSXAppBundleName() + "\"";
+//    QProcess::execute("osascript", args);
+//    if ( flag ){
+//        QStringList args1;
+//        args1 << QString("-e tell application \"System Events\" to make login item at end ").append("with properties {path:\"")
+//                 .append(macOSXAppBundlePath()).append("\", hidden:false}");
+//        QProcess::execute("osascript", args1);
+//    }
+#endif
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
     configIni->setValue("Config/AutoStart",flag);
     delete configIni;
+}
+
+QString macOSXAppBundlePath(){
+    QDir dir = QDir ( QCoreApplication::applicationDirPath() );
+    dir.cdUp();
+    dir.cdUp();
+    QString absolutePath = dir.absolutePath();
+    // absolutePath will contain a "/" at the end,
+    // but we want the clean path to the .app bundle
+    if ( absolutePath.length() > 0 && absolutePath.right(1) == "/" ) {
+        absolutePath.chop(1);
+    }
+    return absolutePath;
+}
+
+QString macOSXAppBundleName(){
+    QString bundlePath = macOSXAppBundlePath();
+    QFileInfo fileInfo(bundlePath);
+    return fileInfo.baseName();
 }
 
 void MainWindow::changeWallpaper()

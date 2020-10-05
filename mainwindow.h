@@ -37,6 +37,8 @@ signals:
     void exit();
 
 private:
+    QString macOSXAppBundlePath();
+    QString macOSXAppBundleName();
     Ui::MainWindow *ui;
     QSystemTrayIcon *mSysTrayIcon;
     QMenu *trayMenu;

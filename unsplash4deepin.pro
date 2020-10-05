@@ -39,6 +39,7 @@ RESOURCES += \
     resources.qrc
 
 #CONFIG +=console
+ICON = Icon.icns
 
 RC_FILE = res.rc
 

@@ -85,7 +85,11 @@ void WallpaperThread::changeWallpaer()
     QString cmd = QString("wget ").append(site).append(" --output-document=").append(file);
 
 #ifdef Q_OS_LINUX
-    QStringList options;
+    QProcess::execute(cmd);
+#endif
+#ifdef Q_OS_MAC
+    cmd = QString("curl -L -o ").append(file).append(" ").append(site);
+    qDebug() << cmd;
     QProcess::execute(cmd);
 #endif
 #ifdef Q_OS_WIN32
@@ -146,12 +150,20 @@ void WallpaperThread::changeWallpaer()
         backgorund.save(file);
     }
 #ifdef Q_OS_LINUX
+    QStringList options;
     QString setWallpaper =  QString("for screen in  `xrandr|grep ' connected'|awk '{print $1}'`; do dbus-send --dest=com.deepin.daemon.Appearance /com/deepin/daemon/Appearance --print-reply com.deepin.daemon.Appearance.SetMonitorBackground string:$screen string:'").append(file).append("';done");
     options << "-c" << setWallpaper;
     QProcess::execute("/bin/bash",options);
 //    QProcess::execute(tr("gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ").append(file));
 #endif
-
+#ifdef Q_OS_MAC
+    QStringList scriptArgs;
+    scriptArgs << QLatin1String("-e") << QString::fromLatin1("tell application \"Finder\" to set desktop picture to POSIX file \"%1\"").arg(file);
+//    QStringList options;
+//    QString setWallpaper = QString("osascript -e 'tell application \"Finder\" to set desktop picture to POSIX file ").append(file);
+//    options << "-c" << setWallpaper;
+    QProcess::execute(QLatin1String("/usr/bin/osascript"),scriptArgs);
+#endif
 #ifdef Q_OS_WIN32
     qDebug() << "setting wallpaper";
     QSettings wallPaper("HKEY_CURRENT_USER\\Control Panel\\Desktop", QSettings::NativeFormat);
@@ -172,6 +184,9 @@ void WallpaperThread::setAutoClear(bool flag)
 
 void WallpaperThread::changeIcon(QString filePath)
 {
+#ifdef Q_OS_MAC
+    return;
+#endif
     sysIcon->setIcon(QIcon(filePath));
 }
 
@@ -181,7 +196,7 @@ void WallpaperThread::changeSource(QString source){
 
 void WallpaperThread::run()
 {
-    QIcon icon = QIcon(":/image/TrayIcon.png");
+//    QIcon icon = QIcon(":/image/TrayIcon.png");
 //    changeIcon(":/image/TrayIcon16x16.png");
 //    qDebug() << minutes;
 //    changeWallpaer();
@@ -195,7 +210,8 @@ void WallpaperThread::run()
         changeIcon(":/image/TrayIcon16x16.png");
         qDebug() << minutes;
         changeWallpaer();
-        sysIcon->setIcon(icon);
+        changeIcon(":/image/TrayIcon.png");
+//        sysIcon->setIcon(icon);
         localMutex.lock();
         condtion.wait(&localMutex,minutes*60*1000);
         localMutex.unlock();

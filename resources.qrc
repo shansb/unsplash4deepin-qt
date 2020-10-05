@@ -6,5 +6,6 @@
         <file>image/Taskbar.png</file>
         <file>languages/zh.qm</file>
         <file>image/desktop.ico</file>
+        <file>image/TrayIcon-mac.png</file>
     </qresource>
 </RCC>

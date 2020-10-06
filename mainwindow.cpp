@@ -109,6 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
     animals = new QAction(tr("animals"),this);
     travel = new QAction(tr("travel"),this);
     food = new QAction(tr("food"),this);
+    nasa = new QAction(tr("NASA"),this);
     all->setCheckable(true);
     wallpaper->setCheckable(true);
     people->setCheckable(true);
@@ -119,6 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
     animals->setCheckable(true);
     travel->setCheckable(true);
     food->setCheckable(true);
+    nasa->setCheckable(true);
     all->setChecked(keyWord.compare("all") == 0);
     wallpaper->setChecked(keyWord.compare("wallpaper") == 0);
     people->setChecked(keyWord.compare("people") == 0);
@@ -129,6 +131,7 @@ MainWindow::MainWindow(QWidget *parent) :
     animals->setChecked(keyWord.compare("animals") == 0);
     travel->setChecked(keyWord.compare("travel") == 0);
     food->setChecked(keyWord.compare("food") == 0);
+    nasa->setChecked(keyWord.compare("NASA") == 0);
     keywords->addAction(all);
     keywords->addAction(wallpaper);
     keywords->addAction(people);
@@ -139,6 +142,7 @@ MainWindow::MainWindow(QWidget *parent) :
     keywords->addAction(animals);
     keywords->addAction(travel);
     keywords->addAction(food);
+    keywords->addAction(nasa);
     QSignalMapper *keyMapper = new QSignalMapper(this);
     connect(all,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
     connect(wallpaper,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
@@ -150,6 +154,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(animals,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
     connect(travel,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
     connect(food,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
+    connect(nasa,SIGNAL(triggered(bool)),keyMapper, SLOT(map()));
     keyMapper->setMapping(all,"all");
     keyMapper->setMapping(wallpaper,"wallpaper");
     keyMapper->setMapping(people,"people");
@@ -160,6 +165,7 @@ MainWindow::MainWindow(QWidget *parent) :
     keyMapper->setMapping(animals,"animals");
     keyMapper->setMapping(travel,"travel");
     keyMapper->setMapping(food,"food");
+    keyMapper->setMapping(nasa,"NASA");
     connect(keyMapper, SIGNAL(mapped(QString)),this, SLOT(changeKeyword(QString)));
 
     //信号连接
@@ -287,16 +293,18 @@ void MainWindow::setAutoStart(bool flag)
     }
 #endif
 #ifdef Q_OS_MAC
-//    QStringList args;
-//    args << "-e tell application \"System Events\" to delete login item\""
-//                + macOSXAppBundleName() + "\"";
-//    QProcess::execute("osascript", args);
-//    if ( flag ){
-//        QStringList args1;
-//        args1 << QString("-e tell application \"System Events\" to make login item at end ").append("with properties {path:\"")
-//                 .append(macOSXAppBundlePath()).append("\", hidden:false}");
-//        QProcess::execute("osascript", args1);
-//    }
+    QStringList args;
+    args << "-e tell application \"System Events\" to delete login item\""
+                + macOSXAppBundleName() + "\"";
+    qDebug()  << args;
+    QProcess::execute("osascript", args);
+    if ( flag ){
+        QStringList args1;
+        args1 << QString("-e tell application \"System Events\" to make login item at end ").append("with properties {path:\"")
+                 .append(this->macOSXAppBundlePath()).append("\", hidden:false}");
+        qDebug()  << args1;
+        QProcess::execute("osascript", args1);
+    }
 #endif
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));
@@ -304,7 +312,7 @@ void MainWindow::setAutoStart(bool flag)
     delete configIni;
 }
 
-QString macOSXAppBundlePath(){
+QString MainWindow::macOSXAppBundlePath(){
     QDir dir = QDir ( QCoreApplication::applicationDirPath() );
     dir.cdUp();
     dir.cdUp();
@@ -317,7 +325,7 @@ QString macOSXAppBundlePath(){
     return absolutePath;
 }
 
-QString macOSXAppBundleName(){
+QString MainWindow::macOSXAppBundleName(){
     QString bundlePath = macOSXAppBundlePath();
     QFileInfo fileInfo(bundlePath);
     return fileInfo.baseName();
@@ -391,6 +399,7 @@ void MainWindow::changeKeyword(QString key){
     animals->setChecked(key.compare("animals") == 0);
     travel->setChecked(key.compare("travel") == 0);
     food->setChecked(key.compare("food") == 0);
+    nasa->setChecked(key.compare("NASA") == 0);
     thread->keyword = key;
     QSettings *configIni = new QSettings (tr("%1/setting.ini").arg(filePath),QSettings::IniFormat);
     configIni->setIniCodec(QTextCodec::codecForName("System"));

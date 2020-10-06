@@ -75,6 +75,7 @@ private:
     QAction *animals;
     QAction *travel;
     QAction *food;
+    QAction *nasa;
 };
 
 #endif // MAINWINDOW_H

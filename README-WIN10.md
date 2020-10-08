@@ -19,6 +19,7 @@
 2. 壁纸源：
       - unplash：国内访问慢，建议加入代理pac，现在可以通过api设置壁纸类别，比较爽。
       - Picsum：国内访问快，但是不是设置类别。
+      - 风云4号：中国气象卫星实时图
 3. 类别：当选择unplash时可用，建议使用`壁纸`类别。
 4. 设置刷新时间：右击托盘图标，点击`刷新间隔`进入子菜单即可勾选指定的刷新时间。
       1. 设置刷新时间后自动在下一次刷新之后生效，也可通过手动刷新即时生效。
@@ -30,4 +31,4 @@
 
 ### 截图
 
-![Logo](https://github.com/shansb/unsplash4deepin-qt/blob/master/win-screenshoot.png?raw=true)
+![Logo](https://github.com/shansb/unsplash4deepin-qt/blob/master/win-screenshot.png?raw=true)

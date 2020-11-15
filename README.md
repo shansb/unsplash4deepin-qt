@@ -1,5 +1,5 @@
 # unsplash4deepin-qt
->  Deepin下的unsplash壁纸更换程序，因为swing版本内存占用达50M左右，所以用QT写了一个，本程序内存占用10M，个人觉得挺完美的了，适配至deepin 20。
+>  Deepin下的unsplash壁纸更换程序，因为swing版本内存占用达50M左右，所以用QT写了一个，本程序内存占用10M，个人觉得挺完美的了，适配至deepin 20。因未系统了解C++及业余时间有限，代码结构会比较混乱。
 
 
 ![Logo](https://github.com/shansb/unsplash4Deepin/blob/master/unsplash4Deepin/src/resource/Taskbar.png?raw=true)
